@@ -48,7 +48,7 @@
 				}
 			} else {
 				//home page - lets just make it the player page for now
-				$this->page = array('title'=>'Players','p'=>'players','content'=>'');
+				$this->page = array('title'=>'Home','p'=>'home','content'=>'');
 			}
 			?>
 				<!DOCTYPE html>
@@ -110,9 +110,10 @@
 				<div class='page'>
 					<div class='playersMenu'>
 						<ul style='clearfix'>
-							<li class='addUser'><a href='<?=$this->config['root']?>addplayer/'>Add User</a></li>
-							<li class='activate'><a href='#'>Activate</a></li>
-							<li class='addGroup noLink'>Add to Group  
+							<li class='addUser noSelect'><a href='<?=$this->config['root']?>addplayer/'>Add User</a></li>
+							<li class='viewUser singleSelect'><a href='<?=$this->config['root']?>'>View Profile</a></li>
+							<li class='activate singleSelect'><a href='#'>Activate</a></li>
+							<li class='addGroup noLink singleSelect multiSelect'>Add to Group  
 								<select name='addGroup'>
 									<option value='dud'>Choose One</option>
 									<?php 
@@ -123,7 +124,7 @@
 									<?php } ?>
 								</select>
 							</li>
-							<li class='removeGroup noLink'>Remove From Group 
+							<li class='removeGroup noLink singleSelect multiSelect'>Remove From Group 
 								<select name='removeGroup'>
 									<option value='dud'>Choose One</option>
 									<?php 
@@ -139,6 +140,7 @@
 					<table class='players'>
 						<thead>
 							<tr>
+								<th>id</th>
 								<th>IGN</th>
 								<th>UUID</th>
 								<th>Email</th>
@@ -148,10 +150,11 @@
 						<tbody>
 							<?php foreach ($players as $player) { ?>
 								<tr>
+									<td><?=$player['id']?></td>
 									<td><?=$player['ign']?></td>
 									<td><?=$player['uid']?></td>
 									<td><?=$player['email']?></td>
-									<td><? if ($player['active'] == 1) { echo "<div class='activePlayer'>Active</div>"; } else { echo "<div class='nonActivePlayer'>Not Active</div>"; } ?></td>
+									<td><? if ($player['active'] == 1) { echo "Active"; } else { echo "Not Active"; } ?></td>
 								</tr>
 							<?php } ?>
 						</tbody>

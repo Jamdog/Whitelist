@@ -1,103 +1,115 @@
-html, body, blockquote, div, form, h1, h2, h3, h4, h5, h6, ol, p, pre, table, ul, li, tbody, td, tfoot, th, thead, tr, object, a, b, br, cite, i, img, span, strong, sub, sup, fieldset {
-	margin: 0;
-	padding: 0;
-	box-sizing:border-box;
-}
-img, fieldset {
-	border: 0;
-}
-/* set html5 elements to block */
-footer, header, nav, section { 
-    display: block;
-}
-
-body {
-	font-family: 'Roboto Condensed', sans-serif;
-}
-header {
-	position:fixed;
-	height:40px;
-	left:0;
-	right:0;
-	top:0;
-	background-image:url('../img/page_elements/header.png');
-	background-position:top left;
-}
-nav {
-	position:fixed;
-	top:40px;
-	left:0;
-	bottom:0;
-	width:200px;
-	background:#2b5861;
-	padding-top:15px;
-}
-nav ul {
-	list-style:none;
-}
-nav li a {
-	display:block;
-	color:#eee;
-	text-decoration:none;
-	padding:5px;
-	font-size:1.2em;
-}
-nav li a i {
-	width:30px;
-	text-align:center;
-}
-nav li a:hover {
-	color:#ed4c63;
-}
-.page {
-	position:fixed;
-	left:200px;
-	top:40px;
-	right:0;
-	bottom:0;
-}
-.players td {
-	text-align:center;
-}
-.dataTables_length,.dataTables_info,.dataTables_filter {
-	padding:10px;
-}
-.playersMenu {
-	height:80px;
-	background:#111;
-}
-.playersMenu ul {
-	list-style:none;
-}
-.playersMenu li {
-	float:left;
-	font-size:1.2em;
-}
-.playersMenu a,.noLink {
-	display:block;
-	color:#eee;
-	text-decoration:none;
-	padding:0 20px;
-	line-height:80px;
-	height:80px;
-}
-.playersMenu a:hover,.noLink:hover {
-	background-color:#333;
-}
-.playersMenu select {
-	margin-left:10px;
-}
-.players .even {
-	background:#eee;
-}
-.players .odd {
-	background:#ddd;
-}
-
-
-/********************************************************
-						 CLEARFIX
-********************************************************/
-
-.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+html, body, blockquote, div, form, h1, h2, h3, h4, h5, h6, ol, p, pre, table, ul, li, tbody, td, tfoot, th, thead, tr, object, a, b, br, cite, i, img, span, strong, sub, sup, fieldset {
+	margin: 0;
+	padding: 0;
+	box-sizing:border-box;
+}
+img, fieldset {
+	border: 0;
+}
+/* set html5 elements to block */
+footer, header, nav, section { 
+    display: block;
+}
+
+body {
+	font-family: 'Roboto Condensed', sans-serif;
+}
+header {
+	position:fixed;
+	height:40px;
+	left:0;
+	right:0;
+	top:0;
+	background-image:url('../img/page_elements/header.png');
+	background-position:top left;
+}
+nav {
+	position:fixed;
+	top:40px;
+	left:0;
+	bottom:0;
+	width:200px;
+	background:#2b5861;
+	padding-top:15px;
+}
+nav ul {
+	list-style:none;
+}
+nav li a {
+	display:block;
+	color:#eee;
+	text-decoration:none;
+	padding:5px;
+	font-size:1.2em;
+}
+nav li a i {
+	width:30px;
+	text-align:center;
+}
+nav li a:hover {
+	color:#ed4c63;
+}
+.page {
+	position:fixed;
+	left:200px;
+	top:40px;
+	right:0;
+	bottom:0;
+}
+.players td {
+	text-align:center;
+	cursor:pointer;
+}
+.dataTables_length,.dataTables_info,.dataTables_filter {
+	padding:10px;
+}
+.playersMenu {
+	height:80px;
+	background:#222;
+}
+.playersMenu ul {
+	list-style:none;
+}
+.playersMenu li {
+	float:left;
+	font-size:1.2em;
+	
+}
+.playersMenu a,.noLink {
+	display:block;
+	color:#eee;
+	text-decoration:none;
+	padding:0 20px;
+	line-height:80px;
+	height:80px;
+}
+.playersMenu a:hover,.noLink:hover {
+	background-color:#333;
+}
+.playersMenu select {
+	margin-left:10px;
+}
+.players .even {
+	background:#fff;
+}
+.players .odd {
+	background:#eaeaea;
+}
+.players .selected {
+	background:#222 !important;
+	color:#eee;
+}
+.singleSelect,.multiSelect {
+	display:none;
+}
+.noSelect {
+	display:block;
+}
+
+
+/********************************************************
+						 CLEARFIX
+********************************************************/
+
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
 .clearfix:after { clear: both; }

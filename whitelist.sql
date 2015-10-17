@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Oct 17, 2015 at 02:02 PM
+-- Generation Time: Oct 17, 2015 at 02:08 PM
 -- Server version: 5.5.45-cll
 -- PHP Version: 5.4.31
 
@@ -19,6 +19,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `apcorey_whitelist`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `active_history`
+--
+
+CREATE TABLE IF NOT EXISTS `active_history` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) NOT NULL,
+  `active_status` tinyint(1) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

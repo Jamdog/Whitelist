@@ -9,5 +9,7 @@
 		"clientId":"",
 		"clientSecret":"",
 		"redirectUri":""
-	}
+	},
+	"googleAuth":false,
+	"root":"/mumbo"
 }

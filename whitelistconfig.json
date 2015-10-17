@@ -1,0 +1,13 @@
+{
+	"mysql": {
+		"host":"localhost",
+		"user":"",
+		"pass":"",
+		"db":""
+	},"googleApi": {
+		"appName":"Mumbo Jumbo's Patreon Server Management",
+		"clientId":"",
+		"clientSecret":"",
+		"redirectUri":""
+	}
+}

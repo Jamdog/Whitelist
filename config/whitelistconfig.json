@@ -1,9 +1,9 @@
 {
 	"mysql": {
 		"host":"localhost",
-		"user":"",
+		"user":"root",
 		"pass":"",
-		"db":""
+		"db":"whitelist"
 	},"googleApi": {
 		"appName":"Mumbo Jumbo's Patreon Server Management",
 		"clientId":"",
@@ -11,5 +11,5 @@
 		"redirectUri":""
 	},
 	"googleAuth":false,
-	"root":"/mumbo"
+	"root":"/whitelist/"
 }

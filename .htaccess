@@ -1,9 +1,0 @@
-<IfModule mod_setenvif.c>
-    <IfModule mod_headers.c>
-        BrowserMatch MSIE ie
-        Header set X-UA-Compatible "IE=Edge" env=ie
-    </IfModule>
-</IfModule>
-
-RewriteEngine on
-RewriteRule ^([0-9a-zA-Z\-/_]+)$ /mumbo/index.php?p=$1 [QSA,L]

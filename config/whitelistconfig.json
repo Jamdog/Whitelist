@@ -11,5 +11,5 @@
 		"redirectUri":""
 	},
 	"googleAuth":false,
-	"root":"/whitelist/"
+	"root":"/whitelist/Whitelist/"
 }

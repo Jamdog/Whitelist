@@ -56,6 +56,11 @@ nav li a:hover {
 	right:0;
 	bottom:0;
 }
+h1 {
+	padding:0 20px;
+	display:block;
+	font-size:2.5em;
+}
 .players td {
 	text-align:center;
 	cursor:pointer;
@@ -65,7 +70,7 @@ nav li a:hover {
 }
 .playersMenu {
 	height:80px;
-	background:#222;
+	background:#333;
 }
 .playersMenu ul {
 	list-style:none;
@@ -96,7 +101,7 @@ nav li a:hover {
 	background:#eaeaea;
 }
 .players .selected {
-	background:#222 !important;
+	background:#33a3ba !important;
 	color:#eee;
 }
 .singleSelect,.multiSelect {
@@ -105,7 +110,38 @@ nav li a:hover {
 .noSelect {
 	display:block;
 }
+form {
+	padding:0 0 20px 0;
+}
+fieldset {
+	margin:20px;
+}
+fieldset input {
+	border:solid 0 #fff;
+	background:#33a3ba;
+	color:#eee;
+	padding:2px 5px;
+	font-size:1.2em;
+	font-family: 'Roboto Condensed', sans-serif;
+	margin-bottom:10px;
+}
+fieldset input:focus {
+	background:#111;
+}
 
+
+.label {
+	font-weight:bold;
+}
+.submit {
+	display:block;
+	margin:0 20px;
+	background:#ed4c63;
+	color:#eee;
+	padding:5px 15px;
+	font-weight:bold;
+	border:solid 0 #fff;
+}
 
 /********************************************************
 						 CLEARFIX

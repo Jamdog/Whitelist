@@ -35,8 +35,11 @@ function contextMenu(count,userInfo) {
 			var activeContext = "Activate";
 		}
 		$('.activate a').html(activeContext);
-
-		$('.viewUser a').attr('href',window.location.href+userInfo[1]+"/");
+		var rootPage = window.location.href;
+		var n = rootPage.indexOf('players/');
+		rootPage = rootPage.substring(0, n != -1 ? n : rootPage.length);
+		console.log(rootPage);
+		$('.viewUser a').attr('href',rootPage+"players/"+userInfo[1]+"/");
 	} else if (count > 1) {
 		//multiple players selected
 		$('.multiSelect').show();

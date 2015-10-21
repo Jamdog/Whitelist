@@ -1,5 +1,5 @@
-<?php
-	session_start();
-	include("./class/main.php");
-	$main = new Main;
+<?php
+	session_start();
+	include("./class/main.php");
+	$main = new Main;
 ?>

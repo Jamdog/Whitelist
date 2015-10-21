@@ -16,15 +16,17 @@
 		public $config;
 		public $user;
 		public $page;
-		function __construct() {
-			$this->config = json_decode(file_get_contents('./config/whitelistconfig.json'),true);
+		function __construct($justAuth = false) {
+			$this->config = json_decode(file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR .'../config/whitelistconfig.json'),true);
 			$this->conn = new PDO('mysql:host='.$this->config['mysql']['host'].';dbname='.$this->config['mysql']['db'],$this->config['mysql']['user'], $this->config['mysql']['pass']);
 			if ($this->config['googleAuth']) {
 				set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ .'/googleauth/vendor/google/apiclient/src');
 				require_once __DIR__ .'/../googleauth/vendor/autoload.php';
 				$this->authenticate();
 			}
-			$this->page();
+			if (!$justAuth) {
+				$this->page();
+			}
 		}
 		public function page() {
 			if (!isset($_GET['p'])) {
@@ -49,7 +51,32 @@
 				$this->page['subPage'] = '';
 			}
 			if ($this->page['subPage'] == 'addplayer' && isset($_POST['submit'])) {
-				
+				//New user submitted
+				//first bring in jam's class
+				include ("./class/whitelist.user.class.php");
+				$_POST['ign'] = filter_var($_POST['ign'],FILTER_SANITIZE_STRING);
+				$_POST['email'] = filter_var($_POST['email'],FILTER_SANITIZE_STRING);
+				$player = new whitelistUser($_POST['ign']);
+				if (is_null($player->e)) {
+					//we've got a live player
+					$player->userData['formattedUUID'];
+					//check if they're already on the server
+					$checkPlayer = $this->conn->prepare("SELECT * FROM member WHERE uid = :uid");
+					$checkPlayer->execute(array('uid'=>$player->userData['formattedUUID']));
+					if ($checkPlayer->rowCount() > 0) {
+						//oops the player already exists, maybe their ign has changed though, so just update the ign and be done with it
+						$updatePlayer = $this->conn->prepare("UPDATE member SET ign = :ign WHERE uid = :uid");
+						//$updatePlayer->execute(array('ign'=>$player->userData['ign'],'uid'=>$player->userData['formattedUUID']))
+					} else {
+						//cool, they don't exist, drop em in there bro!
+						$insertPlayer = $this->conn->prepare("INSERT INTO member (`ign`,`uid`,`email`,`active`) VALUES (:ign,:uid,:email,1)");
+						$insertPlayer->execute(array('ign'=>$player->userIGN,'uid'=>$player->userData['formattedUUID'],'email'=>$_POST['email']));
+					}
+				} else {
+					//oops, there's been an error, display the error's title... maybe more in the future, but that'll do for now
+					$this->issues['ign'] = $player->e['title'];
+				}
+
 			}
 			?>
 				<!DOCTYPE html>
@@ -108,7 +135,7 @@
 		}
 		public function players() {
 			$players = $this->conn->query("SELECT * FROM member ORDER BY ign")->fetchAll(PDO::FETCH_ASSOC);
-			$groups = $this->conn->query("SELECT * FROM `group` ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+			$groups = $this->conn->query("SELECT * FROM `group` ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);
 			$getPlayerGroups = $this->conn->prepare("SELECT `group_id` FROM member_group_link WHERE member_id = :member_id");
 			?>
 				<div class='page'>
@@ -120,6 +147,7 @@
 							} else {
 								$this->profile();
 							}
+							echo "<h1>Player List</h1>";
 						}
 					?>
 					<div class='playersMenu'>
@@ -158,12 +186,12 @@
 								<th>IGN</th>
 								<th>UUID</th>
 								<th>Email</th>
+								<th>Active</th>
 								<?php
 									foreach ($groups as $group) {
 										echo "<th>".$group['name']."</th>";
 									}
 								?>
-								<th>Status</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -172,21 +200,21 @@
 									$getPlayerGroups->execute(array('member_id'=>$player['id']));
 									$playerGroups = $getPlayerGroups->fetchAll(PDO::FETCH_COLUMN);
 									?>
-										<tr>
+										<tr data-playerId='<?=$player['id']?>'>
 											<td><?=$player['id']?></td>
 											<td><?=$player['ign']?></td>
 											<td><?=$player['uid']?></td>
 											<td><?=$player['email']?></td>
+											<td class='activeCell'><? if ($player['active'] == 1) { echo "<i class='fa fa-check'></i>"; } ?></td>
 											<?php
 												foreach ($groups as $group) {
-													echo "<td>";
+													echo "<td data-groupid=".$group['id'].">";
 													if (in_array($group['id'],$playerGroups)) {
-														echo "o";
+														echo "<i class='fa fa-check'></i>";
 													}
 													echo "</td>";
 												}
 											?>
-											<td><? if ($player['active'] == 1) { echo "Active"; } else { echo "Not Active"; } ?></td>
 										</tr>
 									<?php 
 								} 

@@ -76,7 +76,45 @@
 					//oops, there's been an error, display the error's title... maybe more in the future, but that'll do for now
 					$this->issues['ign'] = $player->e['title'];
 				}
-
+			}
+			if ($this->page['p'] == 'players' && $this->page['subPage'] != '' && isset($_POST['submit'])) {
+				//updating profile
+				//get user id
+				$ign = $this->page['subPage'];
+				$getUser = $this->conn->prepare("SELECT * FROM member WHERE ign = :ign");
+				$getUser->execute(array('ign'=>$ign));
+				if ($getUser->rowCount() > 0) {
+					$user = $getUser->fetchAll()[0];
+					//check activation
+					if (isset($_POST['active'])) {
+						$active = 1;
+					} else {
+						$active = 0;
+					}
+					$_POST['email'] = filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
+					$updateMember = $this->conn->prepare("UPDATE member SET active = :active,email = :email WHERE id = :id");
+					$updateMember->execute(array('active'=>$active,'email'=>$_POST['email'],'id'=>$user['id']));
+					//set group states
+					$groups = $this->conn->query("SELECT id FROM `group`")->fetchAll(PDO::FETCH_ASSOC);
+					$checkGroupState = $this->conn->prepare("SELECT * FROM member_group_link WHERE member_id = :member_id AND group_id = :group_id");
+					$insertGroup = $this->conn->prepare("INSERT INTO member_group_link (member_id,group_id) VALUES (:member_id,:group_id)");
+					$removeGroup = $this->conn->prepare("DELETE FROM member_group_link WHERE member_id = :member_id AND group_id = :group_id");
+					foreach ($groups as $group) {
+						//first check it's state
+						if (isset($_POST['g'.$group['id']])) {
+							//see if group link already exists first, if not add it
+							$checkGroupState->execute(array('member_id'=>$user['id'],'group_id'=>$group['id']));
+							if ($checkGroupState->rowCount() == 0) {
+								//go ahead and insert it
+								$insertGroup->execute(array('member_id'=>$user['id'],'group_id'=>$group['id']));
+							}
+						} else {
+							//remove it (if it doesn't already exist, nothing happens here)
+							$removeGroup->execute(array('member_id'=>$user['id'],'group_id'=>$group['id']));
+						}
+					}
+				}
+				
 			}
 			?>
 				<!DOCTYPE html>
@@ -91,6 +129,8 @@
 						<link rel="stylesheet" href="<?=$this->config['root']?>font-awesome/css/font-awesome.min.css">
 						<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jqc-1.11.3,dt-1.10.9,se-1.0.1/datatables.min.css"/>
 						<script type="text/javascript" src="https://cdn.datatables.net/r/dt/jqc-1.11.3,dt-1.10.9,se-1.0.1/datatables.min.js"></script>
+						<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+						<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 						<!--[if lt IE 9]>
 							<script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script>
 							<script src='http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js'></script>
@@ -145,7 +185,7 @@
 							if ($this->page['subPage'] == 'addplayer') {
 								$this->addPlayer();
 							} else {
-								$this->profile();
+								$this->profile($this->page['subPage']);
 							}
 							echo "<h1>Player List</h1>";
 						}
@@ -184,7 +224,6 @@
 							<tr>
 								<th>id</th>
 								<th>IGN</th>
-								<th>UUID</th>
 								<th>Email</th>
 								<th>Active</th>
 								<?php
@@ -203,7 +242,6 @@
 										<tr data-playerId='<?=$player['id']?>'>
 											<td><?=$player['id']?></td>
 											<td><?=$player['ign']?></td>
-											<td><?=$player['uid']?></td>
 											<td><?=$player['email']?></td>
 											<td class='activeCell'><? if ($player['active'] == 1) { echo "<i class='fa fa-check'></i>"; } ?></td>
 											<?php
@@ -227,7 +265,7 @@
 		public function addPlayer() {
 			?>
 				<h1>Add Player</h1>
-				<form method='POST' action= '<?=$this->config['root']?>players/addplayer/'>
+				<form method='POST' action= '<?=$this->config['root']?>players/addplayer/' class='clearfix'>
 					<fieldset>
 						<div class='label'>Email</div>
 						<input type='text' name='email' value='' />
@@ -238,10 +276,86 @@
 				</form>
 			<?
 		}
-		public function profile() {
+		public function profile($ign) {
+			$groups = $this->conn->query("SELECT * FROM `group` ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);
+			$getPlayerInfo = $this->conn->prepare("SELECT * FROM member WHERE ign = :ign");
+			$getPlayerInfo->execute(array('ign'=>$ign));
+			$player = $getPlayerInfo->fetchAll(PDO::FETCH_ASSOC)[0];
+			$getPlayerGroups = $this->conn->prepare("SELECT `group_id` FROM member_group_link WHERE member_id = :member_id");
+			$getPlayerGroups->execute(array('member_id'=>$player['id']));
+			$playerGroups = $getPlayerGroups->fetchAll(PDO::FETCH_COLUMN);
+			$getWarnings = $this->conn->prepare("SELECT *,DATE_FORMAT(original,'%Y-%m-%d') as original,DATE_FORMAT(updated,'%Y-%m-%d') as updated FROM warnings WHERE member_id = :id");
+			$getWarnings->execute(array('id'=>$player['id']));
+			$warnings = $getWarnings->fetchAll(PDO::FETCH_ASSOC);
 			?>
-				<h1>Profile</h1>
-
+				<h1><?=$player['ign']?></h1>
+				<div class='clearfix'>
+					<div class='third'>
+						<form method='POST' action= '<?=$this->config['root']?>players/<?=$this->page['subPage']?>/' class='clearfix'>
+							<fieldset>
+								<div class='label'>Email</div>
+								<input type='text' name='email' value='<?=$player['email']?>' />
+							</fieldset>
+							<fieldset>
+								<ul class='checkBoxList'>
+									<li>
+										<input type='checkbox' name='active'<?php if ($player['active'] == 1) { echo " checked"; } ?> />Active
+									</li>
+									<?php
+										foreach ($groups as $group) {
+											echo "<li>";
+											echo "<input type='checkbox' name='g".$group['id']."'";
+											if (in_array($group['id'],$playerGroups)) {
+												echo " checked";
+											}
+											echo " />";
+											echo $group['name'];
+											echo "</li>";
+										}
+									?>
+								</ul>
+							</fieldset>
+							<input class='submit' type='submit' name='submit' value='Update' />
+						</form>
+					</div>
+					<div class='twoThirds'>
+						<fieldset>
+							<div class='label'>Players attached to this player</div>
+							<p>You'll be able to manage player relationships here (ex: FamilyCraft_Mom FamilyCraft_Dad and HobbyFan are all on one account)</p>
+						</fieldset>
+						<fieldset>
+							<div class='label'>Warnings/Messages</div>
+							<table class='warningList'>
+								<thead>
+									<tr>
+										<th>Original</th><th>Updated</th><th>Message</th><th>Severity</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ($warnings as $key => $warning) { ?>
+										<tr data-row='<?=$warning['id']?>'>
+											<td class='date orgDate'><span><?=$warning['original']?></span><input type='text' value='<?=$warning['original']?>' /></td>
+											<td class='date'><?=$warning['updated']?></td>
+											<td class='warning' contenteditable>
+												<?=$warning['reason']?>
+											</td>
+											<td class='severity' contenteditable>
+												<?=$warning['severity']?>
+											</td>
+										</tr>
+									<?php } ?>
+									<tr data-row='new'>
+										<td class='date orgDate'><span><?=date("Y-m-d")?></span><input type='text' value='<?=date("Y-m-d")?>' /></td>
+										<td class='date'></td>
+										<td class='warning' contenteditable></td>
+										<td class='severity' contenteditable></td>
+									</tr>
+								</tbody>
+							</table>
+						</fieldset>
+						<input data-memid='<?=$player['id']?>' class='submit messageSubmit' type='submit' name='submit' value='Update Messages' />
+					</div>
+				</div>
 			<?php
 		}
 		public function groups() {

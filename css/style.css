@@ -55,14 +55,14 @@ nav li a:hover {
 	top:40px;
 	right:0;
 	bottom:0;
+	overflow:auto;
 }
 h1 {
-	padding:10px 20px;
+	padding:5px 10px;
 	display:block;
-	font-size:2em;
-	background:#c64053;
-	color:#fff;
-	text-align:center;
+	font-size:2.5em;
+	color:#c64053;
+	font-weight:normal;
 }
 .players td {
 	text-align:center;
@@ -119,13 +119,23 @@ h1 {
 .noSelect {
 	display:block;
 }
+
+.third {
+	float:left;
+	width:33.3%;
+}
+.twoThirds {
+	float:left;
+	width:66.6%;
+}
+
 form {
 	padding:0 0 20px 0;
 }
 fieldset {
 	margin:20px;
 }
-fieldset input {
+fieldset input[type=text] {
 	border:solid 0 #fff;
 	background:#33a3ba;
 	color:#eee;
@@ -133,6 +143,7 @@ fieldset input {
 	font-size:1.2em;
 	font-family: 'Roboto Condensed', sans-serif;
 	margin-bottom:10px;
+	width:240px;
 }
 fieldset input:focus {
 	background:#111;
@@ -141,17 +152,68 @@ fieldset input:focus {
 
 .label {
 	font-weight:bold;
+	margin-bottom:4px;
+	font-size:1.1em;
+	color:#333;
+}
+.checkBoxList {
+	list-style:none;
+	font-weight:bold;
+}
+.checkBoxList li {
+	padding:3px 0;
 }
 .submit {
 	display:block;
-	margin:0 20px;
 	background:#ed4c63;
 	color:#eee;
 	padding:5px 15px;
 	font-weight:bold;
 	border:solid 0 #fff;
+	margin-left:20px;
 }
-
+.warningList {
+	width:100%;
+	background:#33a3ba;
+}
+.warningList th {
+	color:#eee;
+	padding:5px 10px;
+	font-weight:normal;
+	text-align:left;
+}
+.warningList th:last-child {
+	text-align:center;
+}
+.warningList td {
+	vertical-align: top;
+	background:#eee;
+	padding:10px 5px;
+	font-size:1.1em;
+}
+.warningList td:last-child {
+	width:40px;
+	text-align:center;
+}
+.warningList td:focus {
+	background:#333;
+	color:#eee;
+}
+.date {
+	width:60px;
+	white-space:nowrap;
+	font-size:.9em !important;
+}
+.orgDate input {
+	opacity:0;
+	position:absolute;
+	width:20px !important;
+	margin-left:-40px;
+}
+.warningList textarea:focus {
+	background:#333;
+	color:#eee;
+}
 /********************************************************
 						 CLEARFIX
 ********************************************************/

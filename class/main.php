@@ -224,7 +224,6 @@
 							<tr>
 								<th>id</th>
 								<th>IGN</th>
-								<th>Email</th>
 								<th>Active</th>
 								<?php
 									foreach ($groups as $group) {
@@ -242,7 +241,6 @@
 										<tr data-playerId='<?=$player['id']?>'>
 											<td><?=$player['id']?></td>
 											<td><?=$player['ign']?></td>
-											<td><?=$player['email']?></td>
 											<td class='activeCell'><? if ($player['active'] == 1) { echo "<i class='fa fa-check'></i>"; } ?></td>
 											<?php
 												foreach ($groups as $group) {
@@ -321,7 +319,7 @@
 					<div class='twoThirds'>
 						<fieldset>
 							<div class='label'>Players attached to this player</div>
-							<p>You'll be able to manage player relationships here (ex: FamilyCraft_Mom FamilyCraft_Dad and HobbyFan are all on one account)</p>
+							<p>You'll be able to manage player relationships here (ex: FamilyCraft_Mom, FamilyCraft_Dad and HobbyFan are all on one account)</p>
 						</fieldset>
 						<fieldset>
 							<div class='label'>Warnings/Messages</div>

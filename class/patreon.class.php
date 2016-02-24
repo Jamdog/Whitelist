@@ -16,10 +16,10 @@ class PatreonAPI {
   public  $loggedIn = FALSE;           // TRUE when logged into Patreon using OAuth 
   private $accessToken = NULL;         // Current user access token when logged in  
   private $access = array(             // Config values - should probably be elsewhere
-	'client_id'=>'8120148cbffe85d36ff0a6d85522d30f412c39a522fcb11c62181afc42385fdf',
-	'client_secret'=>'b22fff62e35e0ce2a5672688465f4cedfbdd3744c03d06cf6ad56011e77cbcc6',
-	'creator_token'=>'hAL8ZumJKX89fDph2QV1MYsjO6CKGK',
-	'creator_refresh'=>'UARbeQZOxfJJTPj94IVfPYAJkSLS7V'
+	'client_id'=>'hidden',
+	'client_secret'=>'shhhh.  Its a secret',
+	'creator_token'=>'Sorry, no creator token here',
+	'creator_refresh'=>'Yep, this is hidden too'
     );
   
   /* Function: UpdateToken
